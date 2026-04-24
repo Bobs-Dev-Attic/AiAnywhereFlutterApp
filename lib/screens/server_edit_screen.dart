@@ -128,13 +128,15 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
               selected: _serverType,
               onChanged: (type) {
                 setState(() {
+                  // Only update port if user hasn't customised it
+                  final currentPort = _portController.text;
+                  final wasDefault = ServerType.values.any(
+                    (t) => t.defaultPort == currentPort,
+                  );
                   _serverType = type;
-                  if (_portController.text.isEmpty ||
-                      _portController.text ==
-                          _serverType.defaultPort) {
-                    // Already updated; keep user change
+                  if (currentPort.isEmpty || wasDefault) {
+                    _portController.text = type.defaultPort;
                   }
-                  _portController.text = type.defaultPort;
                   if (_modelController.text.isEmpty) {
                     _modelController.text = type.defaultModel;
                   }

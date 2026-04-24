@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
@@ -75,7 +76,7 @@ class LogService extends ChangeNotifier {
   }
 
   void _persistAsync() {
-    _storage.saveLogs(List.of(_entries)).ignore();
+    unawaited(_storage.saveLogs(List.of(_entries)));
   }
 
   Future<void> clearLogs() async {

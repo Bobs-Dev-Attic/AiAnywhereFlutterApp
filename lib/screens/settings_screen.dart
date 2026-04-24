@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
 
           // About section
           const SectionHeader(title: 'About'),
-          _AboutCard(),
+          const _AboutCard(),
 
           const SizedBox(height: 40),
         ],
@@ -432,6 +432,8 @@ class _EmptyServersCard extends StatelessWidget {
 }
 
 class _AboutCard extends StatelessWidget {
+  const _AboutCard();
+
   @override
   Widget build(BuildContext context) {
     return Container(

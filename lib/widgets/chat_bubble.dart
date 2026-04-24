@@ -122,7 +122,7 @@ class _AssistantBubble extends StatelessWidget {
                     ],
                   ),
                 ] else if (message.content.isEmpty && message.isStreaming) ...[
-                  _TypingIndicator(),
+                  const _TypingIndicator(),
                 ] else ...[
                   MarkdownBody(
                     data: message.content,
@@ -131,7 +131,7 @@ class _AssistantBubble extends StatelessWidget {
                   ),
                   if (message.isStreaming) ...[
                     const SizedBox(height: 4),
-                    _StreamingCursor(),
+                    const _StreamingCursor(),
                   ],
                 ],
               ],
@@ -192,6 +192,8 @@ class _AssistantBubble extends StatelessWidget {
 }
 
 class _TypingIndicator extends StatefulWidget {
+  const _TypingIndicator();
+
   @override
   State<_TypingIndicator> createState() => _TypingIndicatorState();
 }
@@ -260,6 +262,8 @@ class _TypingIndicatorState extends State<_TypingIndicator>
 }
 
 class _StreamingCursor extends StatefulWidget {
+  const _StreamingCursor();
+
   @override
   State<_StreamingCursor> createState() => _StreamingCursorState();
 }
