@@ -1,0 +1,27 @@
+name: ai_anywhere
+description: Connect to your home AI server (llama.cpp, Ollama, LM Studio) via Tailscale with end-to-end encrypted configuration.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  flutter_secure_storage: ^9.2.2
+  provider: ^6.1.2
+  shared_preferences: ^2.3.2
+  intl: ^0.20.0
+  uuid: ^4.5.1
+  flutter_markdown: ^0.7.4
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
