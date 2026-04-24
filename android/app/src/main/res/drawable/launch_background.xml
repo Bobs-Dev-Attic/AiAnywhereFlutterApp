@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Customize this file to match your native splash screen transition.
+     see https://docs.flutter.dev/development/ui/splash-screen/ for more
+     information about splash screens.  -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/black" />
+</layer-list>

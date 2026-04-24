@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: true
+    avoid_unnecessary_containers: true
+    avoid_web_libraries_in_flutter: true
+    no_logic_in_create_state: true
+    sized_box_for_whitespace: true
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
