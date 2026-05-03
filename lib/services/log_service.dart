@@ -47,8 +47,13 @@ class LogService extends ChangeNotifier {
     String? tag,
     String? details,
   }) {
+    if (kReleaseMode && (level == LogLevel.debug || level == LogLevel.info)) {
+      return;
+    }
     final redactedMessage = _redact(message);
-    final redactedDetails = details == null ? null : _redact(details);
+    final redactedDetails = details == null
+        ? null
+        : (kReleaseMode ? 'Details hidden in release build.' : _redact(details));
     final entry = LogEntry(
       id: _uuid.v4(),
       level: level,

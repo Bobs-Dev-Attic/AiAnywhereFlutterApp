@@ -175,10 +175,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
                   keyboardType: TextInputType.number,
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Port is required';
-                    final parsed = int.tryParse(v);
-                    if (parsed == null) return 'Must be a number';
-                    if (parsed < 1 || parsed > 65535) return 'Port must be 1-65535';
-                    return null;
+                    return ServerValidation.validatePort(v);
                   },
                 ),
                 const _Separator(),
@@ -210,6 +207,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
                         label: 'Model Name',
                         controller: _modelController,
                         placeholder: _serverType.defaultModel,
+                        validator: (v) => ServerValidation.validateModelId(v ?? ''),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -439,7 +437,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
       model: _modelController.text.trim(),
       useTailscale: _useTailscale,
       useHttps: _useHttps,
-      timeoutSeconds: _timeoutSeconds,
+      timeoutSeconds: _timeoutSeconds.clamp(ServerValidation.minTimeoutSeconds, ServerValidation.maxTimeoutSeconds),
       maxTokens: _maxTokens,
       temperature: _temperature,
       systemPrompt: _systemPromptController.text.trim(),
@@ -474,7 +472,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
       host: _hostController.text.trim(),
       port: _portController.text.trim(),
       useHttps: _useHttps,
-      timeoutSeconds: _timeoutSeconds,
+      timeoutSeconds: _timeoutSeconds.clamp(ServerValidation.minTimeoutSeconds, ServerValidation.maxTimeoutSeconds),
     );
 
     final provider = context.read<AppProvider>();
@@ -504,7 +502,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
       host: _hostController.text.trim(),
       port: _portController.text.trim(),
       useHttps: _useHttps,
-      timeoutSeconds: _timeoutSeconds,
+      timeoutSeconds: _timeoutSeconds.clamp(ServerValidation.minTimeoutSeconds, ServerValidation.maxTimeoutSeconds),
     );
 
     final provider = context.read<AppProvider>();

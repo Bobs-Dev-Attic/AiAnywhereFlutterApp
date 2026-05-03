@@ -13,14 +13,14 @@
 - [x] **Add cancellation + backpressure controls** for active streams to avoid runaway resource usage when switching screens.
 
 ## P2 — Secure Engineering Best Practices
-- [ ] Add **input validation schema** for all server settings (host, port range, timeout, model id).
+- [x] Add **input validation schema** for all server settings (host, port range, timeout, model id).
 - [ ] Add **threat-model documentation** (assets, attack surfaces, trust boundaries, mitigations) and update per release.
 - [ ] Add **dependency/security scanning** in CI (SCA + secret scanning + lint + tests).
-- [ ] Ensure release builds disable verbose debug logs and tighten error surfaces (no raw server bodies to end users).
+- [x] Ensure release builds disable verbose debug logs and tighten error surfaces (no raw server bodies to end users).
 
 ## P3 — UX/Product Improvements
-- [ ] Add **security posture indicators** in UI (HTTP vs HTTPS, cert status, VPN connected).
-- [ ] Improve **first-run onboarding** with secure defaults and guided server setup validation.
+- [x] Add **security posture indicators** in UI (HTTP vs HTTPS, cert status, VPN connected).
+- [x] Improve **first-run onboarding** with secure defaults and guided server setup validation.
 - [ ] Add **large-response UX optimizations** (pause generation, jump-to-bottom, copy code block buttons, partial rendering states).
 - [ ] Add **offline/error recovery patterns** (retry policy, reconnect guidance, diagnostics export bundle).
 
@@ -36,3 +36,8 @@
 - [x] Added log redaction for auth/API key secrets before persistence/output.
 - [x] Added throttled in-memory streaming updates plus final persistence checkpoint.
 - [x] Added stream cancellation hook and cancellation handling path.
+
+- [x] Added centralized `ServerValidation` schema checks for port/timeout/model-id constraints.
+- [x] Added Settings UI security posture pills (transport, VPN, cert handling baseline).
+- [x] Added first-run setup checklist card with secure configuration guidance.
+- [x] Reduced release logging verbosity and suppressed raw detail payloads in release builds.
