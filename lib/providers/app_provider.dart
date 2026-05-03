@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 import 'package:uuid/uuid.dart';
 
 import '../models/server_config.dart';
@@ -27,6 +28,8 @@ class AppProvider extends ChangeNotifier {
 
   List<ChatSession> _sessions = [];
   ChatSession? _activeSession;
+  bool _cancelRequested = false;
+  DateTime _lastUiFlush = DateTime.fromMillisecondsSinceEpoch(0);
 
   AppProvider({
     required StorageService storage,
@@ -277,6 +280,9 @@ class AppProvider extends ChangeNotifier {
         messages: toSend,
         apiKey: _activeApiKey,
       )) {
+        if (_cancelRequested) {
+          throw const ApiException('Generation canceled.');
+        }
         buffer.write(chunk);
         final updated = List<Message>.from(_activeSession!.messages);
         final idx = updated.indexWhere((m) => m.id == assistantMessage.id);
@@ -285,7 +291,12 @@ class AppProvider extends ChangeNotifier {
             content: buffer.toString(),
             isStreaming: true,
           );
-          await _updateSessionMessages(updated, notify: true);
+          _applyInMemorySessionMessages(updated);
+          final now = DateTime.now();
+          if (now.difference(_lastUiFlush).inMilliseconds >= 80) {
+            _lastUiFlush = now;
+            notifyListeners();
+          }
         }
       }
 
@@ -325,6 +336,23 @@ class AppProvider extends ChangeNotifier {
     } finally {
       _status = AppStatus.idle;
       notifyListeners();
+    }
+  }
+
+  void cancelActiveStream() {
+    _cancelRequested = true;
+    _log.info('Active stream cancellation requested', tag: 'AppProvider');
+  }
+
+  void _applyInMemorySessionMessages(List<Message> messages) {
+    if (_activeSession == null) return;
+    _activeSession = _activeSession!.copyWith(
+      messages: messages,
+      updatedAt: DateTime.now(),
+    );
+    final idx = _sessions.indexWhere((s) => s.id == _activeSession!.id);
+    if (idx >= 0) {
+      _sessions[idx] = _activeSession!;
     }
   }
 
@@ -383,3 +411,7 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+    if (isStreaming) {
+      cancelActiveStream();
+    }
+    _cancelRequested = false;

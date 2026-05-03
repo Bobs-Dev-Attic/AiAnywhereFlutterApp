@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Allow cleartext traffic to local/Tailscale endpoints.
-     In production you should restrict this to specific domains. -->
+<!-- HTTPS-by-default transport policy. -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>

@@ -47,12 +47,14 @@ class LogService extends ChangeNotifier {
     String? tag,
     String? details,
   }) {
+    final redactedMessage = _redact(message);
+    final redactedDetails = details == null ? null : _redact(details);
     final entry = LogEntry(
       id: _uuid.v4(),
       level: level,
-      message: message,
+      message: redactedMessage,
       tag: tag,
-      details: details,
+      details: redactedDetails,
       timestamp: DateTime.now(),
     );
 
@@ -64,15 +66,22 @@ class LogService extends ChangeNotifier {
     // Also output to the developer console in debug mode.
     if (kDebugMode) {
       developer.log(
-        '${tag != null ? '[$tag] ' : ''}$message',
+        '${tag != null ? '[$tag] ' : ''}$redactedMessage',
         name: entry.level.label,
         level: _dartLogLevel(level),
-        error: details,
+        error: redactedDetails,
       );
     }
 
     notifyListeners();
     _persistAsync();
+  }
+
+  String _redact(String input) {
+    var value = input;
+    value = value.replaceAll(RegExp(r'(?i)(authorization:\s*bearer\s+)[^\s,]+'), r'$1[REDACTED]');
+    value = value.replaceAll(RegExp(r'(?i)(api[_-]?key["\']?\s*[:=]\s*["\']?)[^"\',\s]+'), r'$1[REDACTED]');
+    return value;
   }
 
   void _persistAsync() {
