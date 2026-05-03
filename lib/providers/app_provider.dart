@@ -7,6 +7,7 @@ import '../models/message.dart';
 import '../services/api_service.dart';
 import '../services/log_service.dart';
 import '../services/storage_service.dart';
+import '../services/telemetry_service.dart';
 
 enum AppStatus { idle, loading, streaming, error }
 
@@ -16,6 +17,7 @@ class AppProvider extends ChangeNotifier {
   final StorageService _storage;
   final ApiService _api;
   final LogService _log;
+  final TelemetryService _telemetry;
 
   AppStatus _status = AppStatus.idle;
   String? _errorMessage;
@@ -35,9 +37,11 @@ class AppProvider extends ChangeNotifier {
     required StorageService storage,
     required ApiService api,
     required LogService log,
+    required TelemetryService telemetry,
   })  : _storage = storage,
         _api = api,
-        _log = log;
+        _log = log,
+        _telemetry = telemetry;
 
   // ─── Getters ──────────────────────────────────────────────────────────────
   AppStatus get status => _status;
@@ -269,6 +273,8 @@ class AppProvider extends ChangeNotifier {
 
     final buffer = StringBuffer();
 
+    final startedAt = DateTime.now();
+    var completed = false;
     try {
       // Build messages to send (exclude the empty streaming placeholder)
       final toSend = history
@@ -311,6 +317,8 @@ class AppProvider extends ChangeNotifier {
         await _updateSessionMessages(finalHistory);
       }
 
+      completed = true;
+
       // Auto-title the session from the first user message
       if (_activeSession!.title == 'New Chat') {
         final title = _generateTitle(text);
@@ -334,6 +342,13 @@ class AppProvider extends ChangeNotifier {
       _log.error('Unexpected error: $e', tag: 'AppProvider');
       _setError('Something went wrong. Please try again.');
     } finally {
+      final latencyMs = DateTime.now().difference(startedAt).inMilliseconds;
+      _telemetry.recordStreamResult(
+        serverType: _activeServer!.serverType,
+        latencyMs: latencyMs,
+        success: completed && !_cancelRequested,
+        canceled: _cancelRequested,
+      );
       _status = AppStatus.idle;
       notifyListeners();
     }

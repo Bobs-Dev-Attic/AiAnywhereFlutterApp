@@ -25,9 +25,9 @@
 - [ ] Add **offline/error recovery patterns** (retry policy, reconnect guidance, diagnostics export bundle).
 
 ## P4 — Testing & Observability
-- [ ] Add unit/integration tests for streaming parser edge cases (SSE fragmentation, malformed JSON lines, timeout transitions).
+- [x] Add unit/integration tests for streaming parser edge cases (SSE fragmentation, malformed JSON lines, timeout transitions).
 - [ ] Add performance benchmarks (long chats, 10k+ messages, low-memory devices).
-- [ ] Add privacy-safe telemetry hooks (opt-in) for failure rates/latency percentiles.
+- [x] Add privacy-safe telemetry hooks (opt-in) for failure rates/latency percentiles.
 
 
 ## Running Log
@@ -41,3 +41,6 @@
 - [x] Added Settings UI security posture pills (transport, VPN, cert handling baseline).
 - [x] Added first-run setup checklist card with secure configuration guidance.
 - [x] Reduced release logging verbosity and suppressed raw detail payloads in release builds.
+
+- [x] Added parser-focused unit tests for OpenAI/Ollama streaming edge cases (fragmented/malformed lines).
+- [x] Added opt-in privacy-safe telemetry hook for stream outcome + latency metrics (no content/PII capture).

@@ -7,6 +7,7 @@ import 'screens/main_shell.dart';
 import 'services/api_service.dart';
 import 'services/log_service.dart';
 import 'services/storage_service.dart';
+import 'services/telemetry_service.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -37,17 +38,20 @@ Future<void> main() async {
   await logService.initialize();
 
   final apiService = ApiService(logService);
+  final telemetryService = TelemetryService(logService);
 
   final appProvider = AppProvider(
     storage: storageService,
     api: apiService,
     log: logService,
+    telemetry: telemetryService,
   );
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: logService),
+        ChangeNotifierProvider.value(value: telemetryService),
         ChangeNotifierProvider.value(value: appProvider),
       ],
       child: const AiAnywhereApp(),

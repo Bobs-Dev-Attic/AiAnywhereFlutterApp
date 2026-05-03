@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -180,6 +181,12 @@ class ApiService {
       return null;
     }
   }
+
+  @visibleForTesting
+  String? parseOpenAiChunkForTest(String line) => _parseOpenAiChunk(line);
+
+  @visibleForTesting
+  String? parseOllamaChunkForTest(String line) => _parseOllamaChunk(line);
 
   // ─── Generic Streaming HTTP ───────────────────────────────────────────────
 
