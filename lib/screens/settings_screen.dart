@@ -38,6 +38,12 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
           ],
 
+          if (provider.servers.isEmpty) ...[
+            const SectionHeader(title: 'First Run Guide'),
+            const _OnboardingCard(),
+            const SizedBox(height: 20),
+          ],
+
           // Server List
           const SectionHeader(title: 'Servers'),
           if (provider.servers.isEmpty)
@@ -111,6 +117,22 @@ class _ActiveServerCard extends StatelessWidget {
                         color: AiAnywhereTheme.textSecondary,
                         fontSize: 13,
                       ),
+                    ),
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        _SecurityPill(
+                          label: server.useHttps ? 'HTTPS' : 'HTTP',
+                          secure: server.useHttps,
+                        ),
+                        _SecurityPill(
+                          label: server.useTailscale ? 'VPN: Tailscale' : 'VPN: Off',
+                          secure: server.useTailscale,
+                        ),
+                        const _SecurityPill(label: 'Cert: Standard', secure: true),
+                      ],
                     ),
                   ],
                 ),
@@ -195,6 +217,59 @@ class _ActiveServerCard extends StatelessWidget {
       case ConnectionStatus.error:
         return AiAnywhereTheme.destructive.withOpacity(0.4);
     }
+  }
+}
+
+
+
+class _SecurityPill extends StatelessWidget {
+  final String label;
+  final bool secure;
+
+  const _SecurityPill({required this.label, required this.secure});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = secure ? AiAnywhereTheme.accentSecondary : AiAnywhereTheme.warning;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+}
+
+class _OnboardingCard extends StatelessWidget {
+  const _OnboardingCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AiAnywhereTheme.surface,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Secure setup checklist', style: TextStyle(fontWeight: FontWeight.w600)),
+          SizedBox(height: 10),
+          Text('1. Add your server and keep HTTPS enabled where available.'),
+          SizedBox(height: 6),
+          Text('2. Prefer Tailscale IP or MagicDNS names for private access.'),
+          SizedBox(height: 6),
+          Text('3. Use Test Connection before saving to validate config.'),
+        ],
+      ),
+    );
   }
 }
 

@@ -95,12 +95,17 @@ MIT
 
 ## Security Hardening Status
 
-### Completed (P0/P1)
+### Completed (P0/P1/P2/P3)
 - HTTPS-first defaults are enforced on Android and iOS; arbitrary cleartext is disabled.
 - Host and port input validation now blocks malformed/unsafe host formats and invalid ports.
 - Logging now redacts sensitive auth/API-key patterns before persistence and console output.
 - Streaming UI updates are throttled (~80ms) and session persistence is deferred to checkpoints/end-of-message.
 - Active stream cancellation is supported to reduce runaway updates/resource usage.
+
+- Added centralized input validation schema for server port/model/timeout constraints (P2).
+- Release builds now suppress verbose debug/info logs and hide raw error detail payloads (P2).
+- Added security posture indicators in Settings (HTTPS/HTTP, VPN status, cert handling baseline) (P3).
+- Added first-run onboarding checklist in Settings with secure setup guidance (P3).
 
 ### Still Planned
 - Database migration from SharedPreferences blobs to Isar/SQLite (P1).

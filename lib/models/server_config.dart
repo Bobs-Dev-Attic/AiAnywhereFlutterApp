@@ -38,6 +38,46 @@ extension ServerTypeExtension on ServerType {
   }
 }
 
+
+
+class ServerValidation {
+  static const int minPort = 1;
+  static const int maxPort = 65535;
+  static const int minTimeoutSeconds = 5;
+  static const int maxTimeoutSeconds = 300;
+  static const int minModelLength = 1;
+  static const int maxModelLength = 128;
+
+  static String? validatePort(String value) {
+    final port = int.tryParse(value.trim());
+    if (port == null) return 'Must be a number';
+    if (port < minPort || port > maxPort) {
+      return 'Port must be $minPort-$maxPort';
+    }
+    return null;
+  }
+
+  static String? validateTimeoutSeconds(int value) {
+    if (value < minTimeoutSeconds || value > maxTimeoutSeconds) {
+      return 'Timeout must be $minTimeoutSeconds-$maxTimeoutSeconds seconds';
+    }
+    return null;
+  }
+
+  static String? validateModelId(String value) {
+    final model = value.trim();
+    if (model.isEmpty) return 'Model is required';
+    if (model.length < minModelLength || model.length > maxModelLength) {
+      return 'Model id must be $minModelLength-$maxModelLength chars';
+    }
+    final allowed = RegExp(r'^[a-zA-Z0-9._:-]+$');
+    if (!allowed.hasMatch(model)) {
+      return 'Use letters, numbers, dot, underscore, colon, hyphen';
+    }
+    return null;
+  }
+}
+
 class ServerConfig {
   final String id;
   final String name;
