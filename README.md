@@ -106,7 +106,10 @@ MIT
 - Release builds now suppress verbose debug/info logs and hide raw error detail payloads (P2).
 - Added security posture indicators in Settings (HTTPS/HTTP, VPN status, cert handling baseline) (P3).
 - Added first-run onboarding checklist in Settings with secure setup guidance (P3).
+- Added unit tests for streaming parser edge-cases (malformed/fragmented SSE and JSON lines) (P4).
+- Added privacy-safe, opt-in telemetry hook for stream failure/latency outcomes without prompt content collection (P4).
 
 ### Still Planned
+- Performance benchmarks for long chats / low-memory devices (P4).
 - Database migration from SharedPreferences blobs to Isar/SQLite (P1).
 - Optional mTLS / cert-fingerprint trust onboarding flow (P0).
