@@ -91,3 +91,17 @@ flutter build ios --release --no-codesign  # iOS
 ## License
 
 MIT
+
+
+## Security Hardening Status
+
+### Completed (P0/P1)
+- HTTPS-first defaults are enforced on Android and iOS; arbitrary cleartext is disabled.
+- Host and port input validation now blocks malformed/unsafe host formats and invalid ports.
+- Logging now redacts sensitive auth/API-key patterns before persistence and console output.
+- Streaming UI updates are throttled (~80ms) and session persistence is deferred to checkpoints/end-of-message.
+- Active stream cancellation is supported to reduce runaway updates/resource usage.
+
+### Still Planned
+- Database migration from SharedPreferences blobs to Isar/SQLite (P1).
+- Optional mTLS / cert-fingerprint trust onboarding flow (P0).

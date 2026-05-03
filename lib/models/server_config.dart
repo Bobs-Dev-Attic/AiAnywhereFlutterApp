@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 enum ServerType { ollama, llamaCpp, lmStudio }
 
@@ -147,6 +148,25 @@ class ServerConfig {
         model: 'llama3',
         useTailscale: true,
       );
+
+  static String? validateHost(String value) {
+    final host = value.trim();
+    if (host.isEmpty) return 'Host is required';
+    if (host.contains('://') || host.contains('/') || host.contains('?')) {
+      return 'Enter hostname/IP only (no scheme or path)';
+    }
+    final lowered = host.toLowerCase();
+    if (lowered == '0.0.0.0' || lowered == '::') {
+      return 'Wildcard bind addresses are not allowed';
+    }
+    final ip = InternetAddress.tryParse(host);
+    if (ip != null) return null;
+    final hostRegex = RegExp(r'^[a-zA-Z0-9.-]+$');
+    if (!hostRegex.hasMatch(host) || host.startsWith('.') || host.endsWith('.')) {
+      return 'Invalid hostname';
+    }
+    return null;
+  }
 }
 
 class ServerConfigList {

@@ -162,8 +162,7 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
                   controller: _hostController,
                   placeholder: '100.64.0.1 or hostname',
                   keyboardType: TextInputType.url,
-                  validator: (v) =>
-                      (v == null || v.isEmpty) ? 'Host is required' : null,
+                  validator: (v) => v == null ? 'Host is required' : ServerConfig.validateHost(v),
                   hint: _useTailscale
                       ? 'Use Tailscale IP (100.x.x.x) or MagicDNS name'
                       : null,
@@ -176,7 +175,9 @@ class _ServerEditScreenState extends State<ServerEditScreen> {
                   keyboardType: TextInputType.number,
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Port is required';
-                    if (int.tryParse(v) == null) return 'Must be a number';
+                    final parsed = int.tryParse(v);
+                    if (parsed == null) return 'Must be a number';
+                    if (parsed < 1 || parsed > 65535) return 'Port must be 1-65535';
                     return null;
                   },
                 ),
